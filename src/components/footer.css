@@ -1,0 +1,101 @@
+/* Gradient Animation for Footer Background */
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Footer Links - Hover Effect */
+.footer-links a:hover {
+  color: #fbbf24; /* Tailwind Yellow-400 */
+  text-decoration: underline;
+}
+
+/* Footer Icons - Hover Effect */
+.footer-icon:hover {
+  transform: scale(1.2);
+  color: #fbbf24;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Responsive Footer Layout */
+.footer-bg {
+  /* background: linear-gradient(45deg, #2c3e50, #34495e); */
+  animation: gradientBG 5s ease infinite;
+}
+
+.footer-bg .container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.footer-bg .grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Default 1 column for mobile */
+  gap: 1.5rem;
+}
+
+.footer-bg .text-center {
+  text-align: center;
+}
+
+.footer-bg h3 {
+  font-size: 1.75rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.footer-bg p {
+  font-size: 1.125rem;
+  color: #e2e8f0;
+}
+
+.footer-bg .footer-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.footer-bg .footer-icons a {
+  text-decoration: none;
+  color: #e2e8f0;
+}
+
+/* Adjust for Medium Screens (Tablets) */
+@media (min-width: 640px) {
+  .footer-bg .grid {
+    grid-template-columns: 1fr 1fr; /* Two columns */
+  }
+}
+
+/* Adjust for Large Screens (Desktops) */
+@media (min-width: 1024px) {
+  .footer-bg .grid {
+    grid-template-columns: 1fr 1fr 1fr; /* Three columns */
+  }
+
+  .footer-bg .container {
+    max-width: 80%;
+  }
+}
+
+/* Footer Text and Icon Sizes for Responsiveness */
+@media (min-width: 768px) {
+  .footer-bg h3 {
+    font-size: 1.5rem; /* Slightly larger text */
+  }
+
+  .footer-bg p {
+    font-size: 1.125rem;
+  }
+
+  .footer-bg .footer-icons svg {
+    width: 30px;
+    height: 30px;
+  }
+}

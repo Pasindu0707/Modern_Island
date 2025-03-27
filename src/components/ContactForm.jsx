@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
+import { motion } from 'framer-motion';
 
 function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    inquiry: '',
-  });
-
+  const [formData, setFormData] = useState({ name: '', email: '', inquiry: '' });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setError(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     const emailParams = {
       from_name: formData.name,
@@ -27,135 +26,131 @@ function ContactForm() {
     };
 
     try {
-      await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-        emailParams,
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
-      );
+      await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams, 'YOUR_PUBLIC_KEY');
       setSubmitted(true);
+      setFormData({ name: '', email: '', inquiry: '' });
     } catch (error) {
       console.error('Error sending email:', error);
+      setError('Failed to send message. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section
-      id="contact"
-      className="py-16 bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white"
-    >
-      <div className="container mx-auto px-6">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-extrabold mb-4">Get in Touch</h2>
-          <p className="text-gray-400 text-lg">
-            Have any questions or inquiries? We'd love to hear from you! Fill
-            out the form below and we'll get back to you as soon as possible.
-          </p>
-        </div>
+    <section id="contact" className="min-h-screen animated-bg text-white py-20 px-4 scroll-mt-20">
+      <motion.div
+        className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="space-y-8">
+          <div className="section-title-container">
+            <h2 className="gradient-text text-4xl font-bold mb-4">
+              Get in Touch
+            </h2>
+            <p className="text-gray-300 text-lg">We'd love to hear from you!</p>
+          </div>
 
-        <div className="flex flex-col lg:flex-row items-center lg:space-x-10">
-          {/* Contact Details */}
-          <div className="w-full lg:w-1/2 mb-8 lg:mb-0 bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-            <ul className="space-y-4 text-gray-400">
-              <li>
-                <strong className="text-yellow-400">Name:</strong> Mayura
-                Fernando
+          <div className="modern-card">
+            <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
+            <ul className="space-y-4 text-base text-gray-300">
+              <li className="flex items-center gap-2">
+                <span className="text-pink-400">Name:</span>
+                <span>Mayura Fernando</span>
               </li>
-              <li>
-                <strong className="text-yellow-400">Phone:</strong> +94 77 298
-                6680
+              <li className="flex items-center gap-2">
+                <span className="text-pink-400">Phone:</span>
+                <a href="tel:+94772986680" className="hover:text-pink-400 transition-colors">
+                  +94 77 298 6680
+                </a>
               </li>
-              <li>
-                <strong className="text-yellow-400">Email:</strong>{' '}
-                <a
-                  href="mailto:modernislandofficial@gmail.com"
-                  className="hover:underline"
+              <li className="flex items-center gap-2">
+                <span className="text-pink-400">Email:</span>
+                <a 
+                  href="mailto:modernislandofficial@gmail.com" 
+                  className="text-white hover:text-pink-400 transition-colors"
                 >
                   modernislandofficial@gmail.com
                 </a>
               </li>
             </ul>
           </div>
-
-          {/* Contact Form */}
-          <div className="w-full lg:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
-            {!submitted ? (
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-300"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 mt-1 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-300"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 mt-1 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="inquiry"
-                    className="block text-sm font-medium text-gray-300"
-                  >
-                    Inquiry
-                  </label>
-                  <textarea
-                    id="inquiry"
-                    name="inquiry"
-                    value={formData.inquiry}
-                    onChange={handleChange}
-                    required
-                    rows="4"
-                    className="w-full px-4 py-2 mt-1 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full px-4 py-2 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-500 transition"
-                  disabled={loading}
-                >
-                  {loading ? 'Sending...' : 'Submit'}
-                </button>
-              </form>
-            ) : (
-              <div className="text-center">
-                <h3 className="text-3xl font-bold mb-2">Thank You!</h3>
-                <p className="text-gray-400">
-                  Your message has been sent successfully. We'll get back to you
-                  soon!
-                </p>
-              </div>
-            )}
-          </div>
         </div>
-      </div>
+
+        <div className="modern-card p-8">
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {['name', 'email', 'inquiry'].map((field) => (
+                <div key={field} className="space-y-2">
+                  <label 
+                    htmlFor={field} 
+                    className="block text-sm font-medium text-pink-400 capitalize"
+                  >
+                    {field}
+                  </label>
+                  {field === 'inquiry' ? (
+                    <textarea 
+                      id={field}
+                      name={field}
+                      rows="4"
+                      value={formData[field]}
+                      onChange={handleChange}
+                      required
+                      className="glass-effect w-full px-4 py-3 text-white rounded-xl"
+                      placeholder="Your message..."
+                    />
+                  ) : (
+                    <input 
+                      type={field === 'email' ? 'email' : 'text'}
+                      id={field}
+                      name={field}
+                      value={formData[field]}
+                      onChange={handleChange}
+                      required
+                      className="glass-effect w-full px-4 py-3 text-white rounded-xl"
+                      placeholder={`Your ${field}...`}
+                    />
+                  )}
+                </div>
+              ))}
+
+              {error && (
+                <div className="text-red-400 text-sm bg-red-400/10 p-3 rounded-lg">
+                  {error}
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="modern-button w-full"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Sending...
+                  </span>
+                ) : 'Send Message'}
+              </button>
+            </form>
+          ) : (
+            <motion.div 
+              className="text-center p-8 glass-effect rounded-xl"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3 className="text-2xl font-semibold mb-3 gradient-text">Thank You!</h3>
+              <p className="text-gray-300">We'll get back to you soon!</p>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,36 +1,81 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import members from './data/memebrs'; // Ensure correct path for members
 import { motion } from 'framer-motion';
+import members from './data/memebrs';
 
 function BandMembers() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6
+      }
+    }
+  };
+
   return (
-    <section id="band" className="py-10 bg-gray-900 text-white">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-10">Band Members</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section 
+      id="band" 
+      className="py-20 animated-bg text-white px-4 scroll-mt-20"
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.h2
+          className="gradient-text text-4xl md:text-5xl font-bold mb-12 text-center"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          Meet The Band
+        </motion.h2>
+
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {members.map((member) => (
             <motion.div
               key={member.id}
-              className="bg-gray-800 rounded-lg p-6 cursor-pointer hover:shadow-xl transition flex flex-col items-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.08 }}
-              transition={{ duration: 0.3 }}
+              variants={itemVariants}
+              className="modern-card group"
+              whileHover={{ y: -10 }}
             >
-              {/* Link to member's detail page */}
-              <Link to={`/member/${member.id}`} className="flex flex-col items-center">
-                <img
-                  src={member.photo}
-                  alt={member.name}
-                  className="w-52 h-52 object-cover rounded-full border-4 border-gray-700"
-                />
-                <h3 className="text-2xl font-semibold mt-4">{member.name}</h3>
-                <p className="text-md text-gray-400">{member.role}</p>
+              <Link 
+                to={`/member/${member.id}`}
+                className="block p-5 h-full focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-inset rounded-xl"
+              >
+                <div className="overflow-hidden rounded-xl">
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    className="w-full h-60 object-cover transform group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mt-4 space-y-2">
+                  <h3 className="text-xl font-semibold group-hover:text-pink-400 transition-colors duration-300 ">
+                    {member.name}
+                  </h3>
+                  <p className="text-sm text-pink-400 mt-1">{member.role}</p>
+                </div>
               </Link>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
